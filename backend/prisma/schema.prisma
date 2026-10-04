@@ -1,0 +1,59 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum ProtocolType {
+  F_16_8
+  F_18_6
+  F_20_4
+  OMAD_24
+  ADF_36_12
+  EXTENDED_48
+  CUSTOM
+}
+
+model User {
+  id               String       @id @default(uuid())
+  email            String       @unique
+  passwordHash     String
+  name             String?
+  targetWeight     Float?
+  activeProtocol   ProtocolType @default(ADF_36_12)
+  customGoalHours  Int?         @default(36)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  fasts            FastLog[]
+  weightLogs       WeightLog[]
+}
+
+model FastLog {
+  id             String       @id @default(uuid())
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  protocol       ProtocolType
+  targetHours    Int
+  startTime      DateTime
+  endTime        DateTime?
+  completed      Boolean      @default(false)
+  moodRating     Int?         // 1-5 scale
+  journalNotes   String?
+  createdAt      DateTime     @default(now())
+
+  @@index([userId, startTime])
+}
+
+model WeightLog {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  weightKg  Float
+  recordedAt DateTime @default(now())
+
+  @@index([userId, recordedAt])
+}

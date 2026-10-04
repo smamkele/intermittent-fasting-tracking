@@ -1,0 +1,25 @@
+{
+    "name": "fasting-tracking-backend",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js",
+        "server": "node index.js",
+        "dev": "nodemon index.js",
+        "postinstall": "prisma skills sync || exit 0",
+        "db:generate": "prisma generate"
+    },
+    "keywords": [],
+    "author": "Simamkele Mkentane",
+    "type": "module",
+    "dependencies": {
+        "@prisma/client": "^5.22.0",
+        "bcryptjs": "^3.0.3",
+        "cors": "^2.8.6",
+        "express": "^5.2.1",
+        "jsonwebtoken": "^9.0.3"
+    },
+    "devDependencies": {
+        "prisma": "^5.22.0"
+    }
+}
